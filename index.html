@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c8102e">
+  <meta name="description" content="Beneficios exclusivos con tarjeta de crédito">
+  <title>Beneficios exclusivos</title>
+  <style>
+    :root { color-scheme: dark; font-family: Arial, Helvetica, sans-serif; }
+    * { box-sizing: border-box; }
+    body { min-height: 100svh; margin: 0; display: grid; place-items: center; background: #c8102e; color: #fff; }
+    main { width: min(100%, 460px); padding: 32px 22px 36px; text-align: center; }
+    h1 { margin: 0 0 25px; font-size: clamp(32px, 8vw, 43px); line-height: 1.12; font-weight: 900; text-shadow: 0 3px 5px #0006; }
+    .intro { font-size: clamp(21px, 5.4vw, 27px); line-height: 1.35; margin: 0 0 22px; }
+    .beneficios { list-style: none; padding: 0; margin: 0 0 28px; font-size: clamp(19px, 5vw, 24px); line-height: 1.36; }
+    .beneficios li + li { margin-top: 8px; }
+    .tarjetas { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .tarjeta { display: flex; justify-content: center; align-items: center; flex-shrink: 0; background: #fff; box-shadow: 0 3px 9px #0003; }
+    .visa,.mastercard { width: 80px; height: 80px; border-radius: 50%; }
+    .visa { font-size: 26px; letter-spacing: -2px; font-weight: 900; font-style: italic; color: #163b94; }
+    .mastercard { flex-direction: column; gap: 2px; }
+    .circulos { display: flex; }
+    .circulos i { width: 29px; height: 29px; border-radius: 50%; background: #eb001b; }
+    .circulos i + i { margin-left: -10px; background: #f79e1b; opacity: .9; }
+    .mastercard small { color: #181818; font-size: 10px; font-weight: bold; }
+    .naranja { border-radius: 21px; min-width: 123px; height: 62px; padding: 0 8px; color: #ed6b20; font-size: 20px; letter-spacing: -1px; font-weight: 800; }
+    .naranja span { color: #61216e; }
+    .codigo-box { background: #ffffff0b; border: 1px solid #ffffff35; border-radius: 18px; padding: 20px 12px; }
+    .etiqueta { margin: 0 0 9px; color: #fff; font-size: 13px; letter-spacing: .13em; font-weight: 700; }
+    #codigo { font-weight: 800; font-size: clamp(30px, 8vw, 42px); font-variant-numeric: tabular-nums; letter-spacing: .05em; }
+    .vigencia { font-size: 20px; margin: 14px 0 0; }
+    @media (max-width: 360px) { .tarjetas { gap: 6px; } .visa,.mastercard { width: 68px; height: 68px; } .naranja { min-width: 105px; font-size: 18px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>BENEFICIOS<br>EXCLUSIVOS:</h1>
+    <p class="intro">Ingresando con<br>Tarjeta de Crédito:</p>
+    <ul class="beneficios">
+      <li>A- Compras hoy y pagas<br>el mes que viene</li>
+      <li>B- 12 cuotas con 25%<br>de descuento</li>
+      <li>C- Multiplicamos tu<br>ingreso</li>
+    </ul>
+    <div class="tarjetas" aria-label="Tarjetas Visa, Mastercard y Naranja X">
+      <div class="tarjeta visa" aria-label="Visa">VISA</div>
+      <div class="tarjeta mastercard" aria-label="Mastercard"><div class="circulos" aria-hidden="true"><i></i><i></i></div><small>mastercard</small></div>
+      <div class="tarjeta naranja" aria-label="Naranja X">Naranja<span>X</span></div>
+    </div>
+    <section class="codigo-box" aria-label="Código informativo">
+      <p class="etiqueta">TU CÓDIGO</p>
+      <div id="codigo" aria-live="polite">—</div>
+      <p class="vigencia">Código válido por 24 hs</p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      // Código informativo: no se registra, verifica ni invalida.
+      const generarCodigo = () => {
+        const valores = new Uint32Array(3);
+        crypto.getRandomValues(valores);
+        const alfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const letras = alfabeto[valores[0] % 26] + alfabeto[valores[1] % 26];
+        const numero = 100000 + (valores[2] % 900000);
+        document.getElementById('codigo').textContent =
+          letras + '-' + String(numero);
+      };
+      generarCodigo();
+      window.addEventListener('pageshow', (evento) => {
+        if (evento.persisted) generarCodigo();
+      });
+    })();
+  </script>
+</body>
+</html>
